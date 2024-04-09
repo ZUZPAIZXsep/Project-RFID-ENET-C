@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RFID Data Display</title>
+</head>
+<body>
+  <!-- Assuming you have a form to capture RFID tags -->
+  <form id="rfidForm">
+    <label for="rfidInput">Enter RFID IDs:</label>
+    <input type="text" id="rfidInput" name="rfidTags">
+    <button type="submit">Submit</button>
+  </form>
+
+  <div id="dataDisplay"></div>
+
+  <script>
+    document.getElementById('rfidForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      
+      const rfidTags = document.getElementById('rfidInput').value.split(','); // Assuming IDs are comma-separated
+      const data = { rfidTags };
+
+      try {
+        const response = await fetch('/api/rfid-tags', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        console.log(result);
+        // Display the result on the webpage
+        document.getElementById('dataDisplay').innerHTML = JSON.stringify(result);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
+  </script>
+</body>
+</html>
